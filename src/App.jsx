@@ -71,7 +71,7 @@ const CameraControler = () => {
 	const { camera, gl, scene } = useThree()
 
 	useEffect(() => {
-		new OrbitControls(camera, gl.domElement)
+		// new OrbitControls(camera, gl.domElement)
 	}, [camera, gl, scene])
 
 	return null
