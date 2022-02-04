@@ -41,8 +41,19 @@ div.load {
   height: 100vh;
 }
 
-div.load p {
+div.load div {
+  display: grid;
+  place-items: center;
+}
+
+div.load h1 {
   font-size: 60px;
+  margin: 0;
+}
+
+div.load h2 {
+  font-size: 30px;
+  margin: 10px 0 20px 0;
 }
 
 div.project {
@@ -84,6 +95,7 @@ div.project button {
   border-radius: 20px;
   background: none;
   cursor: pointer;
+  color: black;
 
   margin: 20px 0 0 0;
   width: 100px;
@@ -102,4 +114,27 @@ div.project > div > div.description {
 div.project p {
   margin: 5px 0;
   width: 500px;
+}
+
+
+@media (min-width: 320px) and (max-width: 768px) {
+  div.project {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    background: rgba(255, 255, 255, 0.8);
+
+    margin: 0;
+    width: 100vw;
+  }
+  
+  div.project div {
+    width: 80%;
+  }
+  
+  div.project p {
+    width: 100%;
+  }
 }

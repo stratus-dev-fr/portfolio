@@ -1,14 +1,17 @@
 import { Suspense, useEffect, useState, useRef } from "react"
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
-import { Canvas, extend, useFrame, useThree, useLoader } from "@react-three/fiber"
+import { Canvas, extend, useThree } from "@react-three/fiber"
 import { shaderMaterial } from "@react-three/drei"
 import glsl from "babel-plugin-glsl/macro"
 import gsap, { Back } from "gsap"
 import * as THREE from "three"
 import Stats from "stats.js"
 
+import Loading from "./Loading"
 import Project from "./Project"
+import Element from "./Element"
+import ElementMobile from "./ElementMobile"
 
 const WaveShaderMaterial = shaderMaterial(
 	// uniform
@@ -74,160 +77,6 @@ const CameraControler = () => {
 	return null
 }
 
-const Element = props => {
-	const ref = props.meshRef
-
-	const [, setLoad] = props.load
-	const index = props.index
-
-	const texture = useLoader(THREE.TextureLoader, index === 0 ? "./assets/launcherauto.png" : index === 1 ? "./assets/ltdd.png" : "./assets/bbcs.png", e => console.log(e))
-
-	const [sceneCamera, setSceneCamera] = useState()
-	const [sceneGL, setSceneGL] = useState()
-
-	const [hovered, setHovered] = useState(false)
-	const [active, setActive] = props.activeState
-	const [cooldown, setCooldown] = useState(false)
-
-	const [meshPosition, setMeshPosition] = useState([0, 0, -1])
-
-	const [, setTime] = useState(0.0)
-
-	const [mouseCoord, setMouseCoord] = useState({ x: 0, y: 0 })
-
-	const [offset] = useState({ value: { x: 0, y: 0, z: 0 } })
-	const [offsetRGB] = useState({ value: { x: 0, y: 0, z: 0 } })
-
-	const [lastCoords] = useState({ x: 0, y: 0 })
-
-	useThree(({ gl, camera }) => {
-		if (typeof sceneGL === "undefined")
-			setSceneGL(gl)
-
-		if (typeof sceneCamera === "undefined")
-			setSceneCamera(camera)
-	})
-
-	useEffect(() => {
-		switch (index) {
-			case 0:
-				setMeshPosition([-10, 0, -1])
-				break
-
-			case 2:
-				setMeshPosition([10, 0, 0])
-				break
-
-			default:
-				break
-		}
-
-		if (ref.current) {
-			setLoad(true)
-
-			// mouse hover
-			if (hovered && !active.value && !cooldown) {
-				document.body.style = "cursor: pointer;"
-				const position = ref.current.position
-
-				document.onmousemove = e => {
-					gsap.to(offset.value, { x: e.movementX * 0.01, y: e.movementX * 0.01 }).duration(0.25)
-					gsap.to(offsetRGB.value, { x: e.movementX * 0.002, y: e.movementX * 0.002 }).duration(0.25)
-
-					gsap.to(
-						position,
-						{
-							x: mouseCoord.x * 5 + (index === 0 ? -10 : index === 1 ? 0 : 10),
-							y: mouseCoord.y * 2,
-							ease: Back.easeOut.config(2.5)
-						}).duration(0.25)
-				}
-
-				// mouse leave
-			} else if (!hovered && !active.value && (ref.current.position.x !== 0 || ref.current.position.y !== 0)) {
-				document.body.style = "cursor: default;"
-				document.onmousemove = null
-
-				gsap.to([offset.value, offsetRGB.value], { x: 0, y: 0 }).duration(0.25)
-
-				switch (index) {
-					case 0:
-						gsap.to(ref.current.position, { x: -10, y: 0, z: -1, ease: Back.easeOut.config(2.5) }).duration(0.75)
-						break
-
-					case 2:
-						gsap.to(ref.current.position, { x: 10, y: 0, z: -1, ease: Back.easeOut.config(2.5) }).duration(0.75)
-						break
-
-					default:
-						gsap.to(ref.current.position, { x: 0, y: 0, z: -1, ease: Back.easeOut.config(2.5) }).duration(0.75)
-						break
-				}
-
-				// on click
-			} else if (active.value) {
-				document.body.style = "cursor: default;"
-				document.onmousemove = null
-
-				gsap.to([offset.value, offsetRGB.value], { x: 0, y: 0 }).duration(0.25)
-			}
-		}
-	}, [hovered, active, offset, mouseCoord, setLoad, lastCoords, offsetRGB, index, ref, cooldown])
-
-	useFrame(({ clock, mouse }) => {
-		setTime(clock.elapsedTime)
-		setMouseCoord(mouse)
-
-		if (ref.current)
-			ref.current.rotation.y += 0.0025
-	})
-
-	return <mesh
-		onClick={() => {
-			setActive({ value: true, index: index })
-
-			if (hovered) {
-				gsap.to(ref.current.position, {
-					x: index === 0 ? -6 : index === 1 ? 4 : 14,
-					y: 0, ease: Back.easeInOut.config(3)
-				}).duration(0.75)
-			}
-		}}
-		onPointerOver={() => {
-			setHovered(true)
-
-			// go to project via camera
-			if (parseInt(sceneCamera.position.x) !== parseInt(ref.current.position.x) && !cooldown) {
-				setCooldown(true)
-
-				switch (index) {
-					case 0:
-						gsap.to(sceneCamera.position, { x: -10, ease: Back.easeInOut.config(1.5) }).duration(0.75).then(() => setCooldown(false))
-						break
-
-					case 2:
-						gsap.to(sceneCamera.position, { x: 10, ease: Back.easeOut.config(1.5) }).duration(0.75).then(() => setCooldown(false))
-						break
-
-					default:
-						gsap.to(sceneCamera.position, { x: 0, ease: Back.easeOut.config(1.5) }).duration(0.75).then(() => setCooldown(false))
-						break
-				}
-			}
-		}}
-		onPointerLeave={() => setHovered(false)}
-		position={meshPosition}
-		ref={ref}
-	>
-		<boxGeometry args={[3.4, 5.6, 3.4, 32, 32]} />
-		<waveShaderMaterial
-			uTexture={texture}
-			uOffset={offset.value}
-			uOffsetRGB={offsetRGB.value}
-		/>
-	</mesh>
-}
-
 export default function Scene() {
 	const loadRef = useRef()
 	const loadContainerRef = useRef()
@@ -255,10 +104,17 @@ export default function Scene() {
 
 		animate()
 
-		// remove loading page
 		if (load) {
-			gsap.to(loadContainerRef.current, { opacity: 0, ease: Back.easeInOut.config(2) }).duration(0.75).then(() => loadContainerRef.current.style = "display: none;")
-			gsap.to(loadRef.current.position, { y: -20, ease: Back.easeIn.config(2) }).duration(1.25)
+			// remove loading page
+			gsap.to(loadContainerRef.current, {
+				opacity: 0,
+				ease: Back.easeInOut.config(2)
+			}).duration(0.75)
+			
+			gsap.to(loadRef.current.position, {
+				y: window.outerWidth >= 768 ? -20 : -10,
+				ease: Back.easeIn.config(2)
+			}).duration(1.25).then(() => loadContainerRef.current.style = "display: none;")
 
 			// space items when is active
 			if (active) {
@@ -269,15 +125,27 @@ export default function Scene() {
 				indexes.forEach(index => {
 					switch (index) {
 						case 0:
-							gsap.to(firstRef.current.position, { x: -15, ease: Back.easeInOut.config(3) }).duration(0.25)
+							gsap.to(firstRef.current.position, {
+								x: window.outerWidth >= 768 ? -15 : 0,
+								y: window.outerWidth <= 768 ? -7.5 : 0,
+								ease: Back.easeInOut.config(3)
+							}).duration(0.25)
 							break
 
 						case 1:
-							gsap.to(secondRef.current.position, { x: active.index === 0 ? 10 : active.index === 2 ? -10 : 0, ease: Back.easeInOut.config(3) }).duration(0.25)
+							gsap.to(secondRef.current.position, {
+								x: window.outerWidth >= 768 ? active.index === 0 ? 10 : active.index === 2 ? -10 : 0 : 0,
+								y: window.outerWidth <= 768 ? active.index === 0 ? -5.5 : active.index === 2 ? 5.5 : 0 : 0,
+								ease: Back.easeInOut.config(3)
+							}).duration(0.25)
 							break
 
 						case 2:
-							gsap.to(thirdRef.current.position, { x: 15, ease: Back.easeInOut.config(3) }).duration(0.25)
+							gsap.to(thirdRef.current.position, {
+								x: window.outerWidth >= 768 ? 15 : 0,
+								y: window.outerWidth <= 768 ? 7.5 : 0,
+								ease: Back.easeInOut.config(3)
+							}).duration(0.25)
 							break
 
 						default:
@@ -294,29 +162,50 @@ export default function Scene() {
 				<Project activeState={[active, setActive]} />
 				: undefined}
 
-			<div ref={loadContainerRef} className="load">
-				<p>Loading...</p>
-			</div>
+			<Loading meshRef={loadContainerRef} />
 
-			<Canvas
-				camera={{ fov: 90 }}
-			>
-				<CameraControler />
-				<ambientLight color="black" />
-				<pointLight position={[1, 1, 1]} color={"#ffffff"} />
-				<directionalLight position={[0, 2, 5]} color={"#ffffff"} intensity={10.0} />
+			{window.outerWidth >= 768 ? // laptop
+				<Canvas
+					camera={{ fov: 90 }}
+				>
+					<CameraControler />
+					<ambientLight color="black" />
+					<pointLight position={[1, 1, 1]} color={"#ffffff"} />
+					<directionalLight position={[0, 2, 5]} color={"#ffffff"} intensity={10.0} />
 
-				<mesh ref={loadRef} position={[0, 0, 1]}>
-					<planeGeometry args={[100, 20, 32, 32]} />
-					<meshStandardMaterial color="white" />
-				</mesh>
+					<mesh ref={loadRef} position={[0, 0, 1]}>
+						<planeGeometry args={[100, 20, 32, 32]} />
+						<meshStandardMaterial color="white" />
+					</mesh>
 
-				<Suspense fallback={null}>
-					<Element activeState={[active, setActive]} load={[load, setLoad]} index={0} meshRef={firstRef} />
-					<Element activeState={[active, setActive]} load={[load, setLoad]} index={1} meshRef={secondRef} />
-					<Element activeState={[active, setActive]} load={[load, setLoad]} index={2} meshRef={thirdRef} />
-				</Suspense>
-			</Canvas>
+					<Suspense fallback={null}>
+						<Element activeState={[active, setActive]} load={[load, setLoad]} index={0} meshRef={firstRef} />
+						<Element activeState={[active, setActive]} load={[load, setLoad]} index={1} meshRef={secondRef} />
+						<Element activeState={[active, setActive]} load={[load, setLoad]} index={2} meshRef={thirdRef} />
+					</Suspense>
+				</Canvas>
+
+				: // mobile
+
+				<Canvas
+					camera={{ fov: 90 }}
+				>
+					<CameraControler />
+					<ambientLight color="black" />
+					<pointLight position={[1, 1, 1]} color={"#ffffff"} />
+					<directionalLight position={[0, 2, 5]} color={"#ffffff"} intensity={10.0} />
+
+					<mesh ref={loadRef} position={[0, 0, 1]}>
+						<planeGeometry args={[10, 10, 32, 32]} />
+						<meshStandardMaterial color="white" />
+					</mesh>
+
+					<Suspense fallback={null}>
+						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={0} meshRef={firstRef} />
+						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={1} meshRef={secondRef} />
+						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={2} meshRef={thirdRef} />
+					</Suspense>
+				</Canvas>}
 		</div>
 	)
 }
