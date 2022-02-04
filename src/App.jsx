@@ -71,7 +71,7 @@ const CameraControler = () => {
 	const { camera, gl, scene } = useThree()
 
 	useEffect(() => {
-		// new OrbitControls(camera, gl.domElement)
+		new OrbitControls(camera, gl.domElement)
 	}, [camera, gl, scene])
 
 	return null
@@ -109,12 +109,12 @@ export default function Scene() {
 			gsap.to(loadContainerRef.current, {
 				opacity: 0,
 				ease: Back.easeInOut.config(2)
-			}).duration(0.75)
+			}).duration(0.75).then(() => loadContainerRef.current.style = "display: none;")
 			
 			gsap.to(loadRef.current.position, {
 				y: window.outerWidth >= 768 ? -20 : -10,
 				ease: Back.easeIn.config(2)
-			}).duration(1.25).then(() => loadContainerRef.current.style = "display: none;")
+			}).duration(1.25)
 
 			// space items when is active
 			if (active) {
