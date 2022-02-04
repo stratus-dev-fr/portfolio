@@ -1,13 +1,105 @@
+@font-face {
+  font-family: Agatho-Bold;
+  src: url("./assets/fonts/agatho/Agatho_Medium.otf");
+}
+
+@font-face {
+  font-family: Agatho-Bold;
+  src: url("./assets/fonts/agatho/Agatho_Bold.otf");
+}
+
+@font-face {
+  font-family: Agatho;
+  src: url("./assets/fonts/agatho/Agatho_Light.otf");
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: Agatho;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1 {
+  font-family: Agatho;
+}
+
+div#container {
+  width: 100vw;
+  height: 100vh;
+}
+
+div.hidden {
+  display: none;
+}
+
+div.load {
+  display: grid;
+  place-items: center;
+
+  width: 100vw;
+  height: 100vh;
+}
+
+div.load p {
+  font-size: 60px;
+}
+
+div.project {
+  position: absolute;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+
+  z-index: 999;
+  color: black;
+  opacity: 0;
+
+  margin: 0 0 0 150px;
+  width: 1000px;
+  height: 100vh;
+}
+
+div.project h1 {
+  font-family: Agatho-Bold;
+  margin: 0 0 15px 0;
+}
+
+div.project h2 {
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0;
+}
+
+div.project a {
+  color: black;
+  margin: 10px 0 0 0;
+}
+
+div.project button {
+  transition: 0.25s;
+
+  border: 2px solid black;
+  border-radius: 20px;
+  background: none;
+  cursor: pointer;
+
+  margin: 20px 0 0 0;
+  width: 100px;
+  height: 40px;
+}
+
+div.project button:hover {
+  background: black;
+  color: white;
+}
+
+div.project > div > div.description {
+  margin: 25px 0 15px 0;
+}
+
+div.project p {
+  margin: 5px 0;
+  width: 500px;
 }
