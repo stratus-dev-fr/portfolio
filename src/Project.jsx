@@ -3,39 +3,51 @@ import gsap, { Back } from "gsap"
 
 export default function Project(props) {
 	const [active, setActive] = props.activeState
+
 	const ref = useRef()
+	const descriptionRef = useRef()
+	const buttonRef = useRef()
 
 	useEffect(() => {
-		gsap.fromTo(ref.current, { opacity: 0, y: 100 }, { opacity: 1, y: 0, ease: Back.easeOut.config(1.5) }).duration(0.5)
+		buttonRef.current.onmouseover = () => {
+			gsap.to(buttonRef.current, { background: "black", color: "white", cursor: "pointer" }).duration(0.25)
+		}
+
+		buttonRef.current.onmouseleave = () => {
+			gsap.to(buttonRef.current, { background: "white", color: "black", cursor: "default" }).duration(0.25)
+		}
+
+		gsap.fromTo(ref.current, { opacity: 0 }, { opacity: 1 }).duration(0.25)
+		gsap.fromTo([descriptionRef.current, buttonRef.current],
+			{ opacity: 0, y: 100 },
+			{ opacity: 1, y: 0, ease: Back.easeOut.config(1.5), stagger: 0.1 }).duration(0.5)
 	}, [])
 
 	return (
 		active.index === 0 ?
-			LauncherAutoProject(setActive, active, ref)
+			LauncherAutoProject(setActive, active, ref, descriptionRef, buttonRef)
 
 			: active.index === 1 ?
-				LTDDProject(setActive, active, ref)
+				LTDDProject(setActive, active, ref, descriptionRef, buttonRef)
 
 				: active.index === 2 ?
-					BBCSProject(setActive, active, ref) : undefined
+					BBCSProject(setActive, active, ref, descriptionRef, buttonRef) : undefined
 	)
 }
 
-const handleClose = (e, ref, active, setActive) => {
+const handleClose = (e, ref, active, setActive, descriptionRef, buttonRef) => {
 	e.preventDefault()
 
-	console.log(ref.current.className);
-
-	gsap.to(ref.current, {
-		opacity: 0, y: 100, ease: Back.easeIn.config(1.5)
-	})
-		.duration(0.5)
+	gsap.to(ref.current, { opacity: 0 }).duration(0.5)
+	gsap.to([descriptionRef.current, buttonRef.current],
+		{ opacity: 0, y: 100, ease: Back.easeIn.config(window.outerWidth <= 768 ? 2 : 1.5), stagger: 0.1 })
+		.duration(window.outerWidth <= 768 ? 0.3 : 0.5)
 		.then(() => setActive({ value: false, index: active.index }))
 }
 
-function BBCSProject(setActive, active, ref) {
+function BBCSProject(setActive, active, ref, descriptionRef, buttonRef) {
 	return <div ref={ref} className="project bbcs">
-		<div>
+		<div ref={descriptionRef}>
 			<div>
 				<h1>BBCS</h1>
 				<h2>Billiard Ball Creative Studio</h2>
@@ -49,14 +61,14 @@ function BBCSProject(setActive, active, ref) {
 				<a href="https://bbcs.netlify.app" target="_blank" rel="noopener noreferrer">Visit</a>
 			</div>
 
-			<button onClick={e => handleClose(e, ref, active, setActive)}>Close</button>
+			<button ref={buttonRef} onClick={e => handleClose(e, ref, active, setActive, descriptionRef, buttonRef)}>Close</button>
 		</div>
 	</div>
 }
 
-function LTDDProject(setActive, active, ref) {
+function LTDDProject(setActive, active, ref, descriptionRef, buttonRef) {
 	return <div ref={ref} className="project ltdd">
-		<div>
+		<div ref={descriptionRef}>
 			<div>
 				<h1>LTDD</h1>
 				<h2>La Taverne Du Design</h2>
@@ -70,14 +82,14 @@ function LTDDProject(setActive, active, ref) {
 				<a href="https://ltdd.netlify.app" target="_blank" rel="noopener noreferrer">Visit</a>
 			</div>
 
-			<button onClick={e => handleClose(e, ref, active, setActive)}>Close</button>
+			<button ref={buttonRef} onClick={e => handleClose(e, ref, active, setActive, descriptionRef, buttonRef)}>Close</button>
 		</div>
 	</div>
 }
 
-function LauncherAutoProject(setActive, active, ref) {
+function LauncherAutoProject(setActive, active, ref, descriptionRef, buttonRef) {
 	return <div ref={ref} className="project launcherauto">
-		<div>
+		<div ref={descriptionRef}>
 			<div>
 				<h1>LauncherAuto</h1>
 				<h2>Creez votre launcher en un instant</h2>
@@ -90,8 +102,8 @@ function LauncherAutoProject(setActive, active, ref) {
 
 				<a href="https://launcherauto.com" target="_blank" rel="noopener noreferrer">Visit</a>
 			</div>
-		</div>
 
-		<button onClick={e => handleClose(e, ref, active, setActive)}>Close</button>
+			<button ref={buttonRef} onClick={e => handleClose(e, ref, active, setActive, descriptionRef, buttonRef)}>Close</button>
+		</div>
 	</div>
 }

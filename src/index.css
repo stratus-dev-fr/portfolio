@@ -1,16 +1,16 @@
 @font-face {
   font-family: Agatho-Bold;
-  src: url("./assets/fonts/agatho/Agatho_Medium.otf");
+  src: url("./assets/fonts/agatho/Agatho_BoldCAPS.otf") format("opentype");
 }
 
 @font-face {
-  font-family: Agatho-Bold;
-  src: url("./assets/fonts/agatho/Agatho_Bold.otf");
+  font-family: Agatho-Semibold;
+  src: url("./assets/fonts/agatho/Agatho_Narrow.otf") format("opentype");
 }
 
 @font-face {
   font-family: Agatho;
-  src: url("./assets/fonts/agatho/Agatho_Light.otf");
+  src: url("./assets/fonts/agatho/Agatho_Light.otf") format("opentype");
 }
 
 body {
@@ -75,22 +75,23 @@ div.project {
 
 div.project h1 {
   font-family: Agatho-Bold;
-  margin: 0 0 15px 0;
+  margin: 0 0 10px 0;
 }
 
 div.project h2 {
+  font-family: Agatho-Semibold;
   color: rgba(0, 0, 0, 0.5);
   margin: 0;
 }
 
 div.project a {
+  font-weight: bold;
   color: black;
+
   margin: 10px 0 0 0;
 }
 
 div.project button {
-  transition: 0.25s;
-
   border: 2px solid black;
   border-radius: 20px;
   background: none;
@@ -100,11 +101,6 @@ div.project button {
   margin: 20px 0 0 0;
   width: 100px;
   height: 40px;
-}
-
-div.project button:hover {
-  background: black;
-  color: white;
 }
 
 div.project > div > div.description {

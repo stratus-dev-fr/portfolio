@@ -1,6 +1,6 @@
 {
   "name": "portfolio-router-dom",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "private": true,
   "dependencies": {
     "@react-three/drei": "^8.4.0",

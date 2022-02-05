@@ -77,7 +77,7 @@ export default function ElementMobile(props) {
         position={meshPosition}
         ref={ref}
     >
-        <boxGeometry args={[2.4, 4.6, 2.4, 32, 32]} />
+        <boxGeometry args={[2.6, 4.8, 2.6]} />
         <waveShaderMaterial
             uTexture={texture}
             uOffset={offset.value}

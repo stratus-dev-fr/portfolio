@@ -4,7 +4,6 @@ export default function Loading(props) {
             <div>
                 <h1>Stratus ☁️</h1>
                 <h2>Web front-end developer</h2>
-                <p>React, Three, GSAP, Framer Motion, CSS3, JS</p>
             </div>
         </div>
     )

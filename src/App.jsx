@@ -6,12 +6,11 @@ import { shaderMaterial } from "@react-three/drei"
 import glsl from "babel-plugin-glsl/macro"
 import gsap, { Back } from "gsap"
 import * as THREE from "three"
-import Stats from "stats.js"
 
-import Loading from "./Loading"
+import ElementMobile from "./ElementMobile"
 import Project from "./Project"
 import Element from "./Element"
-import ElementMobile from "./ElementMobile"
+import Loading from "./Loading"
 
 const WaveShaderMaterial = shaderMaterial(
 	// uniform
@@ -89,28 +88,13 @@ export default function Scene() {
 	const [active, setActive] = useState({ value: false, index: 0 })
 
 	useEffect(() => {
-		const stats = new Stats()
-
-		stats.showPanel(0)
-
-		document.body.append(stats.dom)
-
-		const animate = () => {
-			requestAnimationFrame(animate)
-
-			stats.begin()
-			stats.end()
-		}
-
-		animate()
-
 		if (load) {
 			// remove loading page
 			gsap.to(loadContainerRef.current, {
 				opacity: 0,
 				ease: Back.easeInOut.config(2)
 			}).duration(0.75).then(() => loadContainerRef.current.style = "display: none;")
-			
+
 			gsap.to(loadRef.current.position, {
 				y: window.outerWidth >= 768 ? -20 : -10,
 				ease: Back.easeIn.config(2)
@@ -122,14 +106,16 @@ export default function Scene() {
 
 				indexes.splice(active.index, 1)
 
+				console.log(active.index);
+
 				indexes.forEach(index => {
 					switch (index) {
 						case 0:
 							gsap.to(firstRef.current.position, {
 								x: window.outerWidth >= 768 ? -15 : 0,
-								y: window.outerWidth <= 768 ? -7.5 : 0,
+								y: window.outerWidth <= 768 ? active.index === 1 ? -7.5 : -5.5 : 0,
 								ease: Back.easeInOut.config(3)
-							}).duration(0.25)
+							}).duration(window.outerWidth <= 768 ? 0.5 : 0.25)
 							break
 
 						case 1:
@@ -137,15 +123,15 @@ export default function Scene() {
 								x: window.outerWidth >= 768 ? active.index === 0 ? 10 : active.index === 2 ? -10 : 0 : 0,
 								y: window.outerWidth <= 768 ? active.index === 0 ? -5.5 : active.index === 2 ? 5.5 : 0 : 0,
 								ease: Back.easeInOut.config(3)
-							}).duration(0.25)
+							}).duration(window.outerWidth <= 768 ? 0.5 : 0.25)
 							break
 
 						case 2:
 							gsap.to(thirdRef.current.position, {
 								x: window.outerWidth >= 768 ? 15 : 0,
-								y: window.outerWidth <= 768 ? 7.5 : 0,
+								y: window.outerWidth <= 768 ? active.index === 1 ? 7.5 : 5.5 : 0,
 								ease: Back.easeInOut.config(3)
-							}).duration(0.25)
+							}).duration(window.outerWidth <= 768 ? 0.5 : 0.25)
 							break
 
 						default:
