@@ -9,7 +9,7 @@ export default function Element(props) {
     const [, setLoad] = props.load
     const index = props.index
 
-    const texture = useLoader(THREE.TextureLoader, index === 0 ? "./assets/launcherauto.png" : index === 1 ? "./assets/ltdd.png" : "./assets/bbcs.png", e => console.log(e))
+    const texture = useLoader(THREE.TextureLoader, index === 0 ? "./assets/laptop/launcherauto.png" : index === 1 ? "./assets/laptop/ltdd.png" : "./assets/laptop/bbcs.png", e => console.log(e))
 
     const [sceneCamera, setSceneCamera] = useState()
     const [sceneGL, setSceneGL] = useState()
@@ -60,8 +60,8 @@ export default function Element(props) {
                 const position = ref.current.position
 
                 document.onmousemove = e => {
-                    gsap.to(offset.value, { x: e.movementX * 0.01, y: e.movementX * 0.01 }).duration(0.25)
-                    gsap.to(offsetRGB.value, { x: e.movementX * 0.002, y: e.movementX * 0.002 }).duration(0.25)
+                    gsap.to(offset.value, { x: e.movementX * 0.005, y: e.movementX * 0.005 }).duration(0.25)
+                    gsap.to(offsetRGB.value, { x: e.movementX * 0.0005, y: e.movementX * 0.0005 }).duration(0.25)
 
                     gsap.to(
                         position,
@@ -112,14 +112,42 @@ export default function Element(props) {
     })
 
     return <mesh
-        onClick={() => {
+        onClick={async () => {
             setActive({ value: true, index: index })
 
             if (hovered) {
-                gsap.to(ref.current.position, {
-                    x: index === 0 ? -6 : index === 1 ? 4 : 14,
-                    y: 0, ease: Back.easeInOut.config(3)
-                }).duration(0.75)
+                const timeline = gsap.timeline()
+
+                const position = ref.current.position
+                const animations = [offset.value, offsetRGB.value]
+
+                timeline.add("start")
+                    .to(position, {
+                        x: index === 0 ? -6 : index === 1 ? 4 : 14,
+                        y: 0,
+                        duration: 1,
+                        ease: Back.easeInOut.config(3)
+                    }, 0)
+                    .to(animations[0], {
+                        x: 0.5,
+                        y: 0.5,
+                        duration: 0.75,
+                        ease: Back.easeInOut.config(3)
+                    }, 0)
+                    .to(animations[1], {
+                        x: 0.05,
+                        y: 0.05,
+                        duration: 0.75,
+                        ease: Back.easeInOut.config(3)
+                    }, 0)
+
+                timeline.to(animations, {
+                    x: 0,
+                    y: 0,
+                    duration: 0.25
+                }, 0.5)
+
+                timeline.play()
             }
         }}
         onPointerOver={() => {

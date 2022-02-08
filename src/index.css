@@ -56,6 +56,17 @@ div.load h2 {
   margin: 10px 0 20px 0;
 }
 
+span.text-project {
+  position: absolute;
+  font-size: 35px;
+  z-index: 2;
+}
+
+span.text-project.launcherauto {
+  top: 320px;
+  left: 320px;
+}
+
 div.project {
   position: absolute;
 

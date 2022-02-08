@@ -106,30 +106,28 @@ export default function Scene() {
 
 				indexes.splice(active.index, 1)
 
-				console.log(active.index);
-
 				indexes.forEach(index => {
 					switch (index) {
 						case 0:
 							gsap.to(firstRef.current.position, {
 								x: window.outerWidth >= 768 ? -15 : 0,
-								y: window.outerWidth <= 768 ? active.index === 1 ? -7.5 : -5.5 : 0,
+								y: window.outerWidth <= 768 ? active.index === 1 ? -4.5 : -3 : 0,
 								ease: Back.easeInOut.config(3)
-							}).duration(window.outerWidth <= 768 ? 0.5 : 0.25)
+							}).duration(window.outerWidth >= 768 ? 0.5 : 0.25)
 							break
 
 						case 1:
 							gsap.to(secondRef.current.position, {
 								x: window.outerWidth >= 768 ? active.index === 0 ? 10 : active.index === 2 ? -10 : 0 : 0,
-								y: window.outerWidth <= 768 ? active.index === 0 ? -5.5 : active.index === 2 ? 5.5 : 0 : 0,
+								y: window.outerWidth <= 768 ? active.index === 0 ? -3 : active.index === 2 ? 3 : 0 : 0,
 								ease: Back.easeInOut.config(3)
-							}).duration(window.outerWidth <= 768 ? 0.5 : 0.25)
+							}).duration(window.outerWidth >= 768 ? 0.5 : 0.25)
 							break
 
 						case 2:
 							gsap.to(thirdRef.current.position, {
 								x: window.outerWidth >= 768 ? 15 : 0,
-								y: window.outerWidth <= 768 ? active.index === 1 ? 7.5 : 5.5 : 0,
+								y: window.outerWidth <= 768 ? active.index === 1 ? 4.5 : 3 : 0,
 								ease: Back.easeInOut.config(3)
 							}).duration(window.outerWidth <= 768 ? 0.5 : 0.25)
 							break
@@ -147,6 +145,10 @@ export default function Scene() {
 			{active.value ?
 				<Project activeState={[active, setActive]} />
 				: undefined}
+
+			{/* <span ref={textFirstRef} className="text-project launcherauto">LA</span>
+			<span ref={textSecondRef} className="text-project ltdd">LTDD</span>
+			<span ref={textThirdRef} className="text-project bbcs">BBCS</span> */}
 
 			<Loading meshRef={loadContainerRef} />
 
