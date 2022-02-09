@@ -8,6 +8,40 @@ import * as THREE from "three"
 
 extend({ TextGeometry, Text })
 
+export const handleReturnMesh = active => {
+    const position = active.position
+    const offsetRGB = active.offsetRGB
+    const index = active.index
+
+    const timeline = gsap.timeline()
+
+    timeline.add("start")
+        .to(position, {
+            y: 0,
+            z: -0.5,
+            ease: Back.easeOut.config(3)
+        }, 0).duration(0.6)
+        .to(offsetRGB.value, {
+            x: 0.005,
+            y: 0.005,
+            ease: Back.easeOut.config(2),
+            duration: 0.75
+        }, 0)
+
+    timeline
+        .to(position, {
+            z: index !== 1 ? 0 : 0.5,
+            ease: Back.easeOut.config(3),
+            duration: 0.25
+        }, 0.3)
+        .to(offsetRGB.value, {
+            x: 0,
+            y: 0,
+            ease: Back.easeOut.config(2),
+            duration: 0.5
+        }, 0.4)
+}
+
 export default function ElementMobile(props) {
     const ref = props.meshRef
 
@@ -67,12 +101,16 @@ export default function ElementMobile(props) {
 
     return <mesh
         onClick={() => {
-            setActive({ value: true, index: index })
+            setActive({
+                value: true,
+                index: index,
+                position: ref.current.position,
+                offsetRGB
+            })
 
             const timeline = gsap.timeline()
 
             const position = ref.current.position
-            // const animations = [offset.value, offsetRGB.value]
 
             timeline.add("start")
                 .to(position, {

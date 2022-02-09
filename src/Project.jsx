@@ -43,6 +43,9 @@ const handleClose = (e, ref, active, setActive, descriptionRef, buttonRef) => {
 		{ opacity: 0, y: 100, ease: Back.easeIn.config(window.outerWidth <= 768 ? 2 : 1.5), stagger: 0.1 })
 		.duration(window.outerWidth <= 768 ? 0.3 : 0.5)
 		.then(() => setActive({ value: false, index: active.index }))
+
+	if (window.outerWidth <= 768 && active.index !== 1)
+		require("./ElementMobile").handleReturnMesh(active)
 }
 
 function BBCSProject(setActive, active, ref, descriptionRef, buttonRef) {
