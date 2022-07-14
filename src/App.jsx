@@ -2,7 +2,7 @@ import { Suspense, useEffect, useState, useRef } from "react"
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree } from "@react-three/fiber"
-import { ContactShadows, Plane } from "@react-three/drei"
+import { ContactShadows } from "@react-three/drei"
 import { shaderMaterial } from "@react-three/drei"
 import glsl from "babel-plugin-glsl/macro"
 import gsap, { Back } from "gsap"
@@ -132,7 +132,7 @@ export default function Scene() {
 							break
 
 						case 3:
-							gsap.to(refs[3].current.position, {
+							if (window.innerWidth >= 768) gsap.to(refs[3].current.position, {
 								x: window.outerWidth >= 768 ? active.index === 2 ? 24 : 20 : 0,
 								y: window.outerWidth <= 768 ? active.index === 1 ? 4.5 : 3 : 0,
 								ease: Back.easeInOut.config(3)
@@ -183,7 +183,7 @@ export default function Scene() {
 					camera={{ fov: 90 }}
 				>
 					<CameraControler />
-					<ambientLight color="black" />
+					<ambientLight color="white" />
 					<pointLight position={[1, 1, 1]} color={"#ffffff"} />
 					<directionalLight position={[0, 2, 5]} color={"#ffffff"} intensity={10.0} />
 
