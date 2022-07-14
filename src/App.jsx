@@ -2,6 +2,7 @@ import { Suspense, useEffect, useState, useRef } from "react"
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree } from "@react-three/fiber"
+import { ContactShadows, Plane } from "@react-three/drei"
 import { shaderMaterial } from "@react-three/drei"
 import glsl from "babel-plugin-glsl/macro"
 import gsap, { Back } from "gsap"
@@ -22,7 +23,7 @@ const WaveShaderMaterial = shaderMaterial(
 	},
 	// vertex
 	glsl`
-		precision highp float;
+		precision lowp float;
 
 		uniform sampler2D uTexture;
 		uniform vec2 uOffset;
@@ -47,7 +48,7 @@ const WaveShaderMaterial = shaderMaterial(
   	`,
 	// fragment
 	glsl`
-		precision highp float;
+		precision lowp float;
 
 		uniform sampler2D uTexture;
 		uniform vec2 uOffsetRGB;
@@ -130,6 +131,14 @@ export default function Scene() {
 							}).duration(window.outerWidth <= 768 ? 0.5 : 0.25)
 							break
 
+						case 3:
+							gsap.to(refs[3].current.position, {
+								x: window.outerWidth >= 768 ? active.index === 2 ? 24 : 20 : 0,
+								y: window.outerWidth <= 768 ? active.index === 1 ? 4.5 : 3 : 0,
+								ease: Back.easeInOut.config(3)
+							}).duration(window.outerWidth <= 768 ? 0.5 : 0.25)
+							break
+
 						default:
 							break
 					}
@@ -148,11 +157,13 @@ export default function Scene() {
 
 			{window.outerWidth >= 768 ? // laptop
 				<Canvas
+					shadows
+					shadowMap
 					camera={{ fov: 90 }}
 				>
 					<CameraControler />
-					<ambientLight color="black" />
 					<pointLight position={[1, 1, 1]} color={"#ffffff"} />
+					<spotLight intensity={0.5} angle={0.1} penumbra={1} position={[0, 15, 0]} castShadow />
 					<directionalLight position={[0, 2, 5]} color={"#ffffff"} intensity={10.0} />
 
 					<mesh ref={loadRef} position={[0, 0, 1]}>
@@ -161,10 +172,8 @@ export default function Scene() {
 					</mesh>
 
 					<Suspense fallback={null}>
-						<Element activeState={[active, setActive]} load={[load, setLoad]} index={0} meshRef={refs[0]} />
-						<Element activeState={[active, setActive]} load={[load, setLoad]} index={1} meshRef={refs[1]} />
-						<Element activeState={[active, setActive]} load={[load, setLoad]} index={2} meshRef={refs[2]} />
-						<Element activeState={[active, setActive]} load={[load, setLoad]} index={3} meshRef={refs[3]} />
+						{refs.map((ref, i) => <Element activeState={[active, setActive]} load={[load, setLoad]} index={i} key={i} meshRef={ref} />)}
+						<ContactShadows position={[0, -2, 0]} opacity={1} scale={10} blur={1.5} far={0.8} />
 					</Suspense>
 				</Canvas>
 

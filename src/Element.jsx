@@ -20,7 +20,7 @@ export default function Element(props) {
 
     const [meshPosition, setMeshPosition] = useState([0, 0, -1])
 
-    const [, setTime] = useState(0.0)
+    const [time, setTime] = useState(0.0)
 
     const [mouseCoord, setMouseCoord] = useState({ x: 0, y: 0 })
 
@@ -70,7 +70,7 @@ export default function Element(props) {
                     gsap.to(
                         position,
                         {
-                            x: mouseCoord.x * 5 + (index === 0 ? -10 : index === 1 ? 0 : index === 3 ? 20 : 10), // a certainement modifier
+                            x: mouseCoord.x * 5 + (index === 0 ? -10 : index === 1 ? 0 : index === 3 ? 20 : 10),
                             y: mouseCoord.y * 2,
                             ease: Back.easeOut.config(2.5)
                         }).duration(0.25)
@@ -115,8 +115,17 @@ export default function Element(props) {
         setTime(clock.elapsedTime)
         setMouseCoord(mouse)
 
-        if (ref.current)
+        if (ref.current) {
             ref.current.rotation.y += 0.0025
+
+            // ref.current.rotation.x = Math.cos(time / 4) / 8
+            // ref.current.rotation.y = Math.sin(time / 4) / 8
+            // ref.current.rotation.z = -0.2 - (1 + Math.sin(time / 1.5)) / 20
+            if (!hovered || !active) {
+                ref.current.position.y = (1 + Math.sin(time / 1.5)) / 5
+                ref.current.position.x = ref.current.position.x + ((Math.cos(time / 1.5)) / 500)
+            }
+        }
     })
 
     return <mesh
@@ -187,6 +196,8 @@ export default function Element(props) {
         onPointerLeave={() => setHovered(false)}
         position={meshPosition}
         ref={ref}
+        receiveShadow
+        castShadow
     >
         <boxGeometry args={[3.4, 5.6, 3.4, 32, 32]} />
         <waveShaderMaterial
