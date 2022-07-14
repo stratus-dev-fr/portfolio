@@ -31,7 +31,10 @@ export default function Project(props) {
 				LTDDProject(setActive, active, ref, descriptionRef, buttonRef)
 
 				: active.index === 2 ?
-					BBCSProject(setActive, active, ref, descriptionRef, buttonRef) : undefined
+					BBCSProject(setActive, active, ref, descriptionRef, buttonRef)
+
+					: active.index === 3 ?
+						MEGTProject(setActive, active, ref, descriptionRef, buttonRef) : undefined
 	)
 }
 
@@ -104,6 +107,26 @@ function LauncherAutoProject(setActive, active, ref, descriptionRef, buttonRef) 
 				<p>Currently, its purpose is to provide in all Minecraft servers domain, all manual services that cost a lot, converted to automation.</p>
 
 				<a href="https://launcherauto.com" target="_blank" rel="noopener noreferrer">Visit</a>
+			</div>
+
+			<button ref={buttonRef} onClick={e => handleClose(e, ref, active, setActive, descriptionRef, buttonRef)}>Close</button>
+		</div>
+	</div>
+}
+
+function MEGTProject(setActive, active, ref, descriptionRef, buttonRef) {
+	return <div ref={ref} className="project launcherauto">
+		<div ref={descriptionRef}>
+			<div>
+				<h1>Metaverse GT</h1>
+				<h2>Feel the power!</h2>
+			</div>
+
+			<div className="description">
+				<p>Creating a new metaverse open to everyone, without login required, on a website.</p>
+				<p>This multiplayer metaverse has been created in only 4 months.</p>
+
+				<a href="https://megt.io" target="_blank" rel="noopener noreferrer">Visit</a>
 			</div>
 
 			<button ref={buttonRef} onClick={e => handleClose(e, ref, active, setActive, descriptionRef, buttonRef)}>Close</button>

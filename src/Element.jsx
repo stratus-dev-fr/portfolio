@@ -9,7 +9,7 @@ export default function Element(props) {
     const [, setLoad] = props.load
     const index = props.index
 
-    const texture = useLoader(THREE.TextureLoader, index === 0 ? "./assets/laptop/launcherauto.png" : index === 1 ? "./assets/laptop/ltdd.png" : "./assets/laptop/bbcs.png", e => console.log(e))
+    const texture = useLoader(THREE.TextureLoader, index === 0 ? "./assets/laptop/launcherauto.png" : index === 1 ? "./assets/laptop/ltdd.png" : index === 3 ? "./assets/laptop/megt.png" : "./assets/laptop/bbcs.png", e => console.log(e))
 
     const [sceneCamera, setSceneCamera] = useState()
     const [sceneGL, setSceneGL] = useState()
@@ -47,6 +47,10 @@ export default function Element(props) {
                 setMeshPosition([10, 0, 0])
                 break
 
+            case 3:
+                setMeshPosition([20, 0, 0])
+                break
+
             default:
                 break
         }
@@ -66,7 +70,7 @@ export default function Element(props) {
                     gsap.to(
                         position,
                         {
-                            x: mouseCoord.x * 5 + (index === 0 ? -10 : index === 1 ? 0 : 10),
+                            x: mouseCoord.x * 5 + (index === 0 ? -10 : index === 1 ? 0 : index === 3 ? 20 : 10), // a certainement modifier
                             y: mouseCoord.y * 2,
                             ease: Back.easeOut.config(2.5)
                         }).duration(0.25)
@@ -86,6 +90,10 @@ export default function Element(props) {
 
                     case 2:
                         gsap.to(ref.current.position, { x: 10, y: 0, z: -1, ease: Back.easeOut.config(2.5) }).duration(0.75)
+                        break
+
+                    case 3:
+                        gsap.to(ref.current.position, { x: 20, y: 0, z: -1, ease: Back.easeOut.config(2.5) }).duration(0.75)
                         break
 
                     default:
@@ -123,7 +131,7 @@ export default function Element(props) {
 
                 timeline.add("start")
                     .to(position, {
-                        x: index === 0 ? -6 : index === 1 ? 4 : 14,
+                        x: index === 0 ? -6 : index === 1 ? 4 : index === 3 ? 24 : 14,
                         y: 0,
                         duration: 1,
                         ease: Back.easeInOut.config(3)
@@ -164,6 +172,10 @@ export default function Element(props) {
 
                     case 2:
                         gsap.to(sceneCamera.position, { x: 10, ease: Back.easeOut.config(1.5) }).duration(0.75).then(() => setCooldown(false))
+                        break
+
+                    case 3:
+                        gsap.to(sceneCamera.position, { x: 20, ease: Back.easeOut.config(1.5) }).duration(0.75).then(() => setCooldown(false))
                         break
 
                     default:

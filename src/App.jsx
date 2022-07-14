@@ -80,9 +80,7 @@ export default function Scene() {
 	const loadRef = useRef()
 	const loadContainerRef = useRef()
 
-	const firstRef = useRef()
-	const secondRef = useRef()
-	const thirdRef = useRef()
+	const refs = [useRef(), useRef(), useRef(), useRef()];
 
 	const [load, setLoad] = useState(false)
 	const [active, setActive] = useState({ value: false, index: 0 })
@@ -102,14 +100,14 @@ export default function Scene() {
 
 			// space items when is active
 			if (active) {
-				const indexes = [0, 1, 2]
+				const indexes = [0, 1, 2, 3]
 
 				indexes.splice(active.index, 1)
 
 				indexes.forEach(index => {
 					switch (index) {
 						case 0:
-							gsap.to(firstRef.current.position, {
+							gsap.to(refs[0].current.position, {
 								x: window.outerWidth >= 768 ? -15 : 0,
 								y: window.outerWidth <= 768 ? active.index === 1 ? -4.5 : -3 : 0,
 								ease: Back.easeInOut.config(3)
@@ -117,7 +115,7 @@ export default function Scene() {
 							break
 
 						case 1:
-							gsap.to(secondRef.current.position, {
+							gsap.to(refs[1].current.position, {
 								x: window.outerWidth >= 768 ? active.index === 0 ? 10 : active.index === 2 ? -10 : 0 : 0,
 								y: window.outerWidth <= 768 ? active.index === 0 ? -3 : active.index === 2 ? 3 : 0 : 0,
 								ease: Back.easeInOut.config(3)
@@ -125,8 +123,8 @@ export default function Scene() {
 							break
 
 						case 2:
-							gsap.to(thirdRef.current.position, {
-								x: window.outerWidth >= 768 ? 15 : 0,
+							gsap.to(refs[2].current.position, {
+								x: window.outerWidth >= 768 ? active.index === 3 ? -5 : 15 : 0,
 								y: window.outerWidth <= 768 ? active.index === 1 ? 4.5 : 3 : 0,
 								ease: Back.easeInOut.config(3)
 							}).duration(window.outerWidth <= 768 ? 0.5 : 0.25)
@@ -138,17 +136,13 @@ export default function Scene() {
 				})
 			}
 		}
-	}, [load, active])
+	}, [load, active, refs])
 
 	return (
 		<div id="container">
 			{active.value ?
 				<Project activeState={[active, setActive]} />
 				: undefined}
-
-			{/* <span ref={textFirstRef} className="text-project launcherauto">LA</span>
-			<span ref={textSecondRef} className="text-project ltdd">LTDD</span>
-			<span ref={textThirdRef} className="text-project bbcs">BBCS</span> */}
 
 			<Loading meshRef={loadContainerRef} />
 
@@ -167,9 +161,10 @@ export default function Scene() {
 					</mesh>
 
 					<Suspense fallback={null}>
-						<Element activeState={[active, setActive]} load={[load, setLoad]} index={0} meshRef={firstRef} />
-						<Element activeState={[active, setActive]} load={[load, setLoad]} index={1} meshRef={secondRef} />
-						<Element activeState={[active, setActive]} load={[load, setLoad]} index={2} meshRef={thirdRef} />
+						<Element activeState={[active, setActive]} load={[load, setLoad]} index={0} meshRef={refs[0]} />
+						<Element activeState={[active, setActive]} load={[load, setLoad]} index={1} meshRef={refs[1]} />
+						<Element activeState={[active, setActive]} load={[load, setLoad]} index={2} meshRef={refs[2]} />
+						<Element activeState={[active, setActive]} load={[load, setLoad]} index={3} meshRef={refs[3]} />
 					</Suspense>
 				</Canvas>
 
@@ -189,9 +184,9 @@ export default function Scene() {
 					</mesh>
 
 					<Suspense fallback={null}>
-						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={0} meshRef={firstRef} />
-						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={1} meshRef={secondRef} />
-						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={2} meshRef={thirdRef} />
+						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={0} meshRef={refs[0]} />
+						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={1} meshRef={refs[1]} />
+						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={2} meshRef={refs[2]} />
 					</Suspense>
 				</Canvas>}
 		</div>

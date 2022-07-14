@@ -48,7 +48,7 @@ export default function ElementMobile(props) {
     const [, setLoad] = props.load
     const index = props.index
 
-    const texture = useLoader(THREE.TextureLoader, index === 0 ? "./assets/mobile/launcherauto.png" : index === 1 ? "./assets/mobile/ltdd.png" : "./assets/mobile/bbcs.png", e => console.log(e))
+    const texture = useLoader(THREE.TextureLoader, index === 0 ? "./assets/mobile/launcherauto.png" : index === 1 ? "./assets/mobile/ltdd.png" : index === 3 ? "./assets/mobile/megt.png" : "./assets/mobile/bbcs.png", e => console.log(e))
     // const font = useLoader(FontLoader, '/font.json')
 
     const [active, setActive] = props.activeState
