@@ -25,16 +25,31 @@ export default function Project(props) {
 
 	return (
 		active.index === 0 ?
-			LauncherAutoProject(setActive, active, ref, descriptionRef, buttonRef)
+			ProjectElement(setActive, active, ref, descriptionRef, buttonRef, "LauncherAuto", "Creez votre launcher en un instant", <>
+				<p>A generator of launchers for Minecraft servers, it was made in October 2020.</p>
+				<p>The first purpose was to automate the creation of launchers, a service that cost a lot manually.</p>
+				<p>Currently, its purpose is to provide in all Minecraft servers domain, all manual services that cost a lot, converted to automation.</p>
+			</>, "https://launcherauto.com")
 
 			: active.index === 1 ?
-				LTDDProject(setActive, active, ref, descriptionRef, buttonRef)
+				ProjectElement(setActive, active, ref, descriptionRef, buttonRef, "LTDD", "La Taverne Du Design", <>
+					<p>LTDD is a studio for artistic creations, which was a project that I loved to work on.</p>
+					<p>My job was to convert the Figma design to a React.js website, including GSAP, CSS3 and React-router-dom.</p>
+					<p>I learned a lot about the React.js framework and how hooks works.</p>
+				</>, "https://ltdd.netlify.app")
 
 				: active.index === 2 ?
-					BBCSProject(setActive, active, ref, descriptionRef, buttonRef)
+					ProjectElement(setActive, active, ref, descriptionRef, buttonRef, "BBCS", "Billiard Ball Creative Studio", <>
+						<p>BBCS was a studio for artistic creations, which is now permenantly closed.</p>
+						<p>It grows me a lot about SEO and performance, thanks to working with HTML5, CSS3 and JavaScript.</p>
+						<p>I next learned next Next.js and static builds, that helps a lot about SEO and web performance.</p>
+					</>, "https://bbcs.netlify.app")
 
 					: active.index === 3 ?
-						MEGTProject(setActive, active, ref, descriptionRef, buttonRef) : undefined
+						ProjectElement(setActive, active, ref, descriptionRef, buttonRef, "Metaverse GT", "Feel the power!", <>
+							<p>Creating a new metaverse open to everyone, without login required, on a website.</p>
+							<p>This multiplayer metaverse has been created in only 4 months.</p>
+						</>, "https://megt.io") : undefined
 	)
 }
 
@@ -51,82 +66,17 @@ const handleClose = (e, ref, active, setActive, descriptionRef, buttonRef) => {
 		require("./ElementMobile").handleReturnMesh(active)
 }
 
-function BBCSProject(setActive, active, ref, descriptionRef, buttonRef) {
-	return <div ref={ref} className="project bbcs">
+function ProjectElement(setActive, active, ref, descriptionRef, buttonRef, title, subtitle, description, url) {
+	return <div ref={ref} className={`project ${title.toLowerCase()}`}>
 		<div ref={descriptionRef}>
 			<div>
-				<h1>BBCS</h1>
-				<h2>Billiard Ball Creative Studio</h2>
+				<h1>{title}</h1>
+				<h2>{subtitle}</h2>
 			</div>
 
 			<div className="description">
-				<p>BBCS was a studio for artistic creations, which is now permenantly closed.</p>
-				<p>It grows me a lot about SEO and performance, thanks to working with HTML5, CSS3 and JavaScript.</p>
-				<p>I next learned next Next.js and static builds, that helps a lot about SEO and web performance.</p>
-
-				<a href="https://bbcs.netlify.app" target="_blank" rel="noopener noreferrer">Visit</a>
-			</div>
-
-			<button ref={buttonRef} onClick={e => handleClose(e, ref, active, setActive, descriptionRef, buttonRef)}>Close</button>
-		</div>
-	</div>
-}
-
-function LTDDProject(setActive, active, ref, descriptionRef, buttonRef) {
-	return <div ref={ref} className="project ltdd">
-		<div ref={descriptionRef}>
-			<div>
-				<h1>LTDD</h1>
-				<h2>La Taverne Du Design</h2>
-			</div>
-
-			<div className="description">
-				<p>LTDD is a studio for artistic creations, which was a project that I loved to work on.</p>
-				<p>My job was to convert the Figma design to a React.js website, including GSAP, CSS3 and React-router-dom.</p>
-				<p>I learned a lot about the React.js framework and how hooks works.</p>
-
-				<a href="https://ltdd.netlify.app" target="_blank" rel="noopener noreferrer">Visit</a>
-			</div>
-
-			<button ref={buttonRef} onClick={e => handleClose(e, ref, active, setActive, descriptionRef, buttonRef)}>Close</button>
-		</div>
-	</div>
-}
-
-function LauncherAutoProject(setActive, active, ref, descriptionRef, buttonRef) {
-	return <div ref={ref} className="project launcherauto">
-		<div ref={descriptionRef}>
-			<div>
-				<h1>LauncherAuto</h1>
-				<h2>Creez votre launcher en un instant</h2>
-			</div>
-
-			<div className="description">
-				<p>A generator of launchers for Minecraft servers, it was made in October 2020.</p>
-				<p>The first purpose was to automate the creation of launchers, a service that cost a lot manually.</p>
-				<p>Currently, its purpose is to provide in all Minecraft servers domain, all manual services that cost a lot, converted to automation.</p>
-
-				<a href="https://launcherauto.com" target="_blank" rel="noopener noreferrer">Visit</a>
-			</div>
-
-			<button ref={buttonRef} onClick={e => handleClose(e, ref, active, setActive, descriptionRef, buttonRef)}>Close</button>
-		</div>
-	</div>
-}
-
-function MEGTProject(setActive, active, ref, descriptionRef, buttonRef) {
-	return <div ref={ref} className="project launcherauto">
-		<div ref={descriptionRef}>
-			<div>
-				<h1>Metaverse GT</h1>
-				<h2>Feel the power!</h2>
-			</div>
-
-			<div className="description">
-				<p>Creating a new metaverse open to everyone, without login required, on a website.</p>
-				<p>This multiplayer metaverse has been created in only 4 months.</p>
-
-				<a href="https://megt.io" target="_blank" rel="noopener noreferrer">Visit</a>
+				{description}
+				<a href={url} target="_blank" rel="noopener noreferrer">Visit</a>
 			</div>
 
 			<button ref={buttonRef} onClick={e => handleClose(e, ref, active, setActive, descriptionRef, buttonRef)}>Close</button>
