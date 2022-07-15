@@ -1,8 +1,7 @@
-import { Suspense, useEffect, useState, useRef } from "react"
+import { Suspense, useEffect, useState, useRef, useMemo } from "react"
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { Canvas, extend, useThree } from "@react-three/fiber"
-import { ContactShadows } from "@react-three/drei"
 import { shaderMaterial } from "@react-three/drei"
 import glsl from "babel-plugin-glsl/macro"
 import gsap, { Back } from "gsap"
@@ -81,7 +80,22 @@ export default function Scene() {
 	const loadRef = useRef()
 	const loadContainerRef = useRef()
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const refs = [useRef(), useRef(), useRef(), useRef()];
+	const elements = [
+		{
+			path_texture: './assets/laptop/launcherauto.png',
+		},
+		{
+			path_texture: './assets/laptop/ltdd.png',
+		},
+		{
+			path_texture: './assets/laptop/bbcs.png',
+		},
+		{
+			path_texture: './assets/laptop/megt.png',
+		}
+	];
 
 	const [load, setLoad] = useState(false)
 	const [active, setActive] = useState({ value: false, index: 0 })
@@ -163,7 +177,6 @@ export default function Scene() {
 				>
 					<CameraControler />
 					<pointLight position={[1, 1, 1]} color={"#ffffff"} />
-					<spotLight intensity={0.5} angle={0.1} penumbra={1} position={[0, 15, 0]} castShadow />
 					<directionalLight position={[0, 2, 5]} color={"#ffffff"} intensity={10.0} />
 
 					<mesh ref={loadRef} position={[0, 0, 1]}>
@@ -172,8 +185,7 @@ export default function Scene() {
 					</mesh>
 
 					<Suspense fallback={null}>
-						{refs.map((ref, i) => <Element activeState={[active, setActive]} load={[load, setLoad]} index={i} key={i} meshRef={ref} />)}
-						<ContactShadows position={[0, -2, 0]} opacity={1} scale={10} blur={1.5} far={0.8} />
+						{refs.map((ref, i) => <Element activeState={[active, setActive]} load={[load, setLoad]} options={elements[i]} index={i} key={i} meshRef={ref} />)}
 					</Suspense>
 				</Canvas>
 
@@ -193,9 +205,7 @@ export default function Scene() {
 					</mesh>
 
 					<Suspense fallback={null}>
-						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={0} meshRef={refs[0]} />
-						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={1} meshRef={refs[1]} />
-						<ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={2} meshRef={refs[2]} />
+						{[0, 1, 2].map((_, i) => <ElementMobile activeState={[active, setActive]} load={[load, setLoad]} index={i} key={i} meshRef={refs[i]} />)}
 					</Suspense>
 				</Canvas>}
 		</div>

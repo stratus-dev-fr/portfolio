@@ -77,13 +77,20 @@ div.project {
   align-items: flex-start;
   flex-direction: column;
 
-  z-index: 999;
+  transform: translate(-10%, -50%);
+  box-shadow: 0 0 10px black;
+  border-radius: 20px;
+  background: white;
   color: black;
+  z-index: 999;
   opacity: 0;
+  left: 10%;
+  top: 50%;
 
   margin: 0 0 0 150px;
-  width: 1000px;
-  height: 100vh;
+  padding: 40px;
+  width: 750px;
+  height: auto;
 }
 
 div.project h1 {
@@ -134,9 +141,12 @@ div.project p {
     flex-direction: column;
 
     background: rgba(255, 255, 255, 0.8);
+    border-radius: 0;
 
     margin: 0;
+    padding: 0;
     width: 100vw;
+    height: 100vh;
   }
   
   div.project div {

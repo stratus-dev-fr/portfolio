@@ -4,12 +4,13 @@ import gsap, { Back } from "gsap"
 import * as THREE from "three"
 
 export default function Element(props) {
+    const options = props.options
     const ref = props.meshRef
 
     const [, setLoad] = props.load
     const index = props.index
 
-    const texture = useLoader(THREE.TextureLoader, index === 0 ? "./assets/laptop/launcherauto.png" : index === 1 ? "./assets/laptop/ltdd.png" : index === 3 ? "./assets/laptop/megt.png" : "./assets/laptop/bbcs.png", e => console.log(e))
+    const texture = useLoader(THREE.TextureLoader, options.path_texture, e => console.log(e))
 
     const [sceneCamera, setSceneCamera] = useState()
     const [sceneGL, setSceneGL] = useState()
@@ -117,10 +118,6 @@ export default function Element(props) {
 
         if (ref.current) {
             ref.current.rotation.y += 0.0025
-
-            // ref.current.rotation.x = Math.cos(time / 4) / 8
-            // ref.current.rotation.y = Math.sin(time / 4) / 8
-            // ref.current.rotation.z = -0.2 - (1 + Math.sin(time / 1.5)) / 20
             if (!hovered || !active) {
                 ref.current.position.y = (1 + Math.sin(time / 1.5)) / 5
                 ref.current.position.x = ref.current.position.x + ((Math.cos(time / 1.5)) / 500)
@@ -143,19 +140,19 @@ export default function Element(props) {
                         x: index === 0 ? -6 : index === 1 ? 4 : index === 3 ? 24 : 14,
                         y: 0,
                         duration: 1,
-                        ease: Back.easeInOut.config(3)
+                        ease: 'back.inOut(1)'
                     }, 0)
                     .to(animations[0], {
                         x: 0.5,
                         y: 0.5,
                         duration: 0.75,
-                        ease: Back.easeInOut.config(3)
+                        ease: 'back.inOut(1)'
                     }, 0)
                     .to(animations[1], {
                         x: 0.05,
                         y: 0.05,
                         duration: 0.75,
-                        ease: Back.easeInOut.config(3)
+                        ease: 'back.inOut(1)'
                     }, 0)
 
                 timeline.to(animations, {
@@ -171,7 +168,7 @@ export default function Element(props) {
             setHovered(true)
 
             // go to project via camera
-            if (parseInt(sceneCamera.position.x) !== parseInt(ref.current.position.x) && !cooldown) {
+            if (parseInt(sceneCamera.position.x) !== parseInt(ref.current.position.x) && !cooldown && !active.value) {
                 setCooldown(true)
 
                 switch (index) {

@@ -9,15 +9,13 @@ export default function Project(props) {
 	const buttonRef = useRef()
 
 	useEffect(() => {
-		buttonRef.current.onmouseover = () => {
-			gsap.to(buttonRef.current, { background: "black", color: "white", cursor: "pointer" }).duration(0.25)
-		}
+		buttonRef.current.onmouseover = () => gsap.to(buttonRef.current, { background: "black", color: "white", cursor: "pointer" }).duration(0.25)
+		buttonRef.current.onmouseleave = () => gsap.to(buttonRef.current, { background: "white", color: "black", cursor: "default" }).duration(0.25)
 
-		buttonRef.current.onmouseleave = () => {
-			gsap.to(buttonRef.current, { background: "white", color: "black", cursor: "default" }).duration(0.25)
-		}
-
-		gsap.fromTo(ref.current, { opacity: 0 }, { opacity: 1 }).duration(0.25)
+		gsap.fromTo(ref.current, { opacity: 0 }, {
+			opacity: 1,
+			boxShadow: window.innerWidth >= 768 ? '0 0 10px rgba(0,0,0,0.5)' : '',
+		}).duration(0.25)
 		gsap.fromTo([descriptionRef.current, buttonRef.current],
 			{ opacity: 0, y: 100 },
 			{ opacity: 1, y: 0, ease: Back.easeOut.config(1.5), stagger: 0.1 }).duration(0.5)
